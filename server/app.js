@@ -15,3 +15,12 @@ Socketio.on("connection", socket => {
   socket.emit("position", position);
 });
 
+Socketio.on("connection", socket => {
+  socket.emit("position", position);
+  socket.on("move", data => {
+    switch(data) {
+
+    }
+  });
+});
+

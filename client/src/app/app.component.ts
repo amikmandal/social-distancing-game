@@ -20,9 +20,16 @@ export class AppComponent implements OnInit{
 
   public ngAfterViewInit() {
     this.context = this.gameCanvas.nativeElement.getContext("2d");
-    this.context.beginPath();
-    this.context.arc(640, 360, 10, 0, 2 * Math.PI);
-    this.context.fill();
+    this.socket.on("position", position => {
+      this.context.clearRect(0,0, this.gameCanvas.nativeElement.width, this.gameCanvas.nativeElement.height);
+      this.context.beginPath();
+      this.context.arc(position.x, position.y, 10, 0, 2 * Math.PI);
+      this.context.fill();
+    });
+  }
+
+  public move(direction: string) {
+    this.socket.emit("move", direction)
   }
 
 
