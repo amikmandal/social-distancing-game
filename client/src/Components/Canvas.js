@@ -13,8 +13,8 @@ class Canvas extends React.Component {
     }
 
     _onMouseMove(e) {
-        this.drawPlayer(e.screenX, e.screenY);
-        //console.log(e.screenX,e.screenY);
+        this.drawPlayer(e.screenX, e.screenY-75);
+        console.log(e.screenX,e.screenY-75);
     }
 
     drawPlayer(a,b){
