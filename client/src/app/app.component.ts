@@ -18,7 +18,9 @@ export class AppComponent implements OnInit{
 
   public ngAfterViewInit() {
     this.context = this.gameCanvas.nativeElement.getContext("2d");
-    this.context.fillRect(20, 20, 20, 20);
+    this.context.beginPath();
+    this.context.arc(640, 360, 10, 0, 2 * Math.PI);
+    this.context.fill();
   }
 
 
