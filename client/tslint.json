@@ -85,6 +85,9 @@
         "always"
       ]
     },
+    "linterOptions": {
+      "exclude": ["**/*.js"]
+    },
     "space-before-function-paren": {
       "options": {
         "anonymous": "never",

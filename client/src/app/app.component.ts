@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import io from "socket.io-client";
 
 @Component({
   selector: 'app-root',
@@ -11,9 +12,10 @@ export class AppComponent implements OnInit{
   private gameCanvas: ElementRef;
 
   private context: any;
+  private socket: any;
 
   public ngOnInit() {
-
+    this.socket = io("https://localhost:3000");
   }
 
   public ngAfterViewInit() {
