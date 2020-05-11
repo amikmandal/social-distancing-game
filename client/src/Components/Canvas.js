@@ -16,17 +16,14 @@ class Canvas extends React.Component {
     }
 
     componentDidMount() {
-       this.drawPlayer(this.x,this.y);
        this.interval = setInterval(() => {
             const diffX = this.mouseX - this.x
             const diffY = this.mouseY - this.y
             if((diffX * diffX + diffY * diffY > 400)){ //radius squared
-                const newX = this.x+diffX*0.016
-                const newY = this.y+diffY*0.016
-                console.log(newX,newY);
-                this.x = newX
-                this.y = newY
-            }  
+                this.x += diffX*0.016
+                this.y += diffY*0.016
+            }
+            this.drawPlayer()  
         },16);
     }
 
@@ -41,10 +38,10 @@ class Canvas extends React.Component {
         this.canvas = c.getContext('2d');
     }
 
-    drawPlayer(a,b){
+    drawPlayer(){
         this.canvas.clearRect(0, 0, this.width, this.height);
         this.canvas.beginPath();
-        this.canvas.arc(a,b,20,0,2*Math.PI)
+        this.canvas.arc(this.x,this.y,20,0,2*Math.PI)
         this.canvas.fill();
     }
 
