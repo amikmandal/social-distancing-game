@@ -4,43 +4,54 @@ class Canvas extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {w: window.innerWidth, h: window.innerHeight};
-        this._onMouseMove = this._onMouseMove.bind(this);
+        this.width = window.innerWidth
+        this.height = window.innerHeight
+        this.mouseX = this.width/2
+        this.mouseY = this.height/2
+        this.x = this.width/2
+        this.y = this.height/2
+        //this.state = {x: this.width/2, y: this.height/2};
+        this._onMouseMove = this._onMouseMove.bind(this)
         this.setContext = this.setContext.bind(this);
-        //this.state = {time: Date.now()}
     }
 
     componentDidMount() {
-       this.interval = setInterval(this.updateBoard(),16);
-       this.drawPlayer(this.state.w/2,this.state.h/2);
-       //console.log(this.state.w/2,this.state.h/2);
-    }
-
-    updateBoard(){
-        ;
+       this.drawPlayer(this.x,this.y);
+       this.interval = setInterval(() => {
+            const diffX = this.mouseX - this.x
+            const diffY = this.mouseY - this.y
+            if((diffX * diffX + diffY * diffY > 400)){ //radius squared
+                const newX = this.x+diffX*0.016
+                const newY = this.y+diffY*0.016
+                console.log(newX,newY);
+                this.x = newX
+                this.y = newY
+            }  
+        },16);
     }
 
     _onMouseMove(e) {
-        //this.drawPlayer(e.screenX, e.screenY-75);
-        
-        console.log(e.screenX,e.screenY-75);
+        this.mouseX = e.screenX
+        this.mouseY = e.screenY - 75
+        //this.setState({mouseX: e.screenX, mouseY: e.screenY - 75})
+        //console.log(e.screenX,e.screenY-75);
     }
 
     setContext(c) {
-        this.context = c.getContext('2d');
+        this.canvas = c.getContext('2d');
     }
 
     drawPlayer(a,b){
-        this.context.clearRect(0, 0, this.state.w, this.state.h);
-        this.context.beginPath();
-        this.context.arc(a,b,20,0,2*Math.PI)
-        this.context.fill();
+        this.canvas.clearRect(0, 0, this.width, this.height);
+        this.canvas.beginPath();
+        this.canvas.arc(a,b,20,0,2*Math.PI)
+        this.canvas.fill();
     }
 
     render() {
         return (
             <div onMouseMove={this._onMouseMove}>
-            <canvas ref={this.setContext} width={this.state.w} height={this.state.h} style={{border: "1px solid black"}}></canvas>
+            <canvas ref={this.setContext} width={this.width} height={this.height} style={{border: "1px solid black"}}></canvas>
             </div>
         );
     }
