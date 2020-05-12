@@ -16,23 +16,7 @@ const io = socketIo(server);
 // var availablePlayer = 0
 
 var players = {};
-
-// players = {
-//   '3124325235235235' : {
-//     x: 640,
-//     y: 320,
-//     mouseX: 100,
-//     mouseY: 200
-//   },
-//   '2423532643643643' : {
-//     x: 640,
-//     y: 200,
-//     mouseX: 900,
-//     mouseY: 500
-//   }
-// }
-
-//console.log('hi');
+const speed = 10
 
 
 io.on('connection', socket => {
@@ -40,7 +24,6 @@ io.on('connection', socket => {
   console.log('client connected');
   const id = Date.now().toString()
   players[id] = {}
-  //players[id] = {s: socket};
   socket.emit('id', id);
 
   socket.on('info', data => {
@@ -48,6 +31,8 @@ io.on('connection', socket => {
     players[id].h = data.h
     players[id].x = 640
     players[id].y = 320
+    players[id].mouseX = players[id].x
+    players[id].mouseY = players[id].y
     io.emit('position', {x: players[id].x, y: players[id].y} )
   })
 
@@ -56,37 +41,48 @@ io.on('connection', socket => {
     players[id].mouseY = data.mouseY
   })
 
-  setInterval(() => {
-    players[id].x += 5
-    players[id].y += 5
+  players[id].interval = setInterval(() => {
+    updatePosition(id);
+    io.emit('debug', {x: players[id].mouseX, y: players[id].mouseY})
     io.emit('position', {x: players[id].x, y: players[id].y} )
-  },1000);
+  },16);
 
   socket.on('disconnect', () => {
-    console.log('disconnected ', players[id])
-    players = {}
-    //delete players.id
+    console.log('disconnected ')
+    clearInterval(players[id].interval)
+    delete players.id
   });
 
 })
 
-// Socketio.on('connection', socket => {
-//   socket.emit('init','Hello Client!')
-// })
+function updatePosition(id){
+  const oldX = players[id].x
+  const oldY = players[id].y
+  const diffX = players[id].mouseX - oldX
+  const diffY = players[id].mouseY - oldY
+  const angle = Math.atan(diffY/diffX)
+  const factor = diffX > 0 ? 1 : -1;
+  if(distance(diffX,diffY) > 20){
+      //constant speed
+      players[id].x += factor * speed * Math.cos(angle)
+      players[id].y += factor * speed * Math.sin(angle)
+  }
 
-// Socketio.on('info', data => {
-//   console.log('hello')
-//   console.log(data.id)
-//   Socketio.emit('position', positions[availablePlayer]);
-//   availablePlayer++;
-// });
+  if(outOfBounds(players[id].x,players[id].w)){
+    console.log('oldX')
+    players[id].x = oldX
+  }
+  if(outOfBounds(players[id].y,players[id].h)){
+    console.log('oldY')
+    players[id].y = oldY
+  }
+}
 
-// Socketio.on("connection", socket => {
-//   socket.emit("position", position);
-//   socket.on("move", data => {
-//     switch(data) {
+function distance(a,b){
+  return Math.sqrt(a*a+b*b)
+}
 
-//     }
-//   });
-// });
+function outOfBounds(c,max){
+  return c<20 || c>2*(max - 20)
+}
 
