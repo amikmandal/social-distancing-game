@@ -17,10 +17,10 @@ Socketio.on("connection", socket => {
 
 Socketio.on("connection", socket => {
   socket.emit("position", position);
-  socket.on("move", data => {
-    switch(data) {
-
-    }
+  socket.on("move", dir => {
+    position.x += dir.x;
+    position.y += dir.y;
+    Socketio.emit("position", position);
   });
 });
 
