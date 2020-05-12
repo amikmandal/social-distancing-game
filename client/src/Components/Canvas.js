@@ -1,4 +1,5 @@
 import React from 'react';
+import io from "socket.io-client";
 
 class Canvas extends React.Component {
 
@@ -12,6 +13,7 @@ class Canvas extends React.Component {
         this.weight = this.frameTime/1000;
 
         this.state = {mouseX: this.width/2, mouseY: this.height/2, x: this.width/2, y: this.height/2};
+        this.socket = io("http://localhost:3000");
 
         this._onMouseMove = this._onMouseMove.bind(this);
         this.setContext = this.setContext.bind(this);
@@ -35,7 +37,9 @@ class Canvas extends React.Component {
             if(!this.isInBoundsY(newY)){
                 newY = this.state.y
             }
-            this.setState({x: newX, y: newY});
+            //this.setState({x: newX, y: newY});
+            var dir = {xDir: newX, yDir: newY};
+            this.socket.emit("move", dir);
 
             this.drawPlayer()
         }
@@ -51,7 +55,11 @@ class Canvas extends React.Component {
     }
 
     _onMouseMove(e) {
-        this.setState({mouseX: e.screenX, mouseY: e.screenY - 75})
+        // update the socket in server
+        //this.setState({mouseX: e.screenX, mouseY: e.screenY - 75});
+        var dir = {xDir: e.screenX, yDir: e.screenY - 75};
+        console.log(dir);
+        this.socket.emit("move", dir);
     }
 
     setContext(c) {
@@ -59,10 +67,15 @@ class Canvas extends React.Component {
     }
 
     drawPlayer(){
-        this.canvas.clearRect(0, 0, this.width, this.height);
-        this.canvas.beginPath();
-        this.canvas.arc(this.state.x,this.state.y,this.radius,0,2*Math.PI)
-        this.canvas.fill();
+        this.socket.on("position", data => {
+            console.log("hello");
+            this.canvas.clearRect(0, 0, this.width, this.height);
+            this.canvas.beginPath();
+            console.log(data);
+            //this.canvas.arc(this.state.x,this.state.y,this.radius,0,2*Math.PI);
+            this.canvas.arc(data.x,data.y,this.radius,0,2*Math.PI);
+            this.canvas.fill();
+        });
     }
 
     render() {
