@@ -21,14 +21,10 @@ Http.listen(3000, () => {
   console.log("Listening at :3000...");
 });
 
-var position = {
-  x: 200,
-  y: 200
-};
-
-Socketio.on('connection', socket => {
-  console.log(position[availablePlayer]);
-  Socketio.emit('position', position[availablePlayer]);
+Socketio.on('connection', data => {
+  console.log('hello')
+  console.log(data.id)
+  Socketio.emit('position', positions[availablePlayer]);
 });
 
 // Socketio.on("connection", socket => {
