@@ -22,7 +22,7 @@ class Client extends Component {
     this.interval = setInterval(()=>this.socket.emit('mouse', {mouseX: this.mouseX/this.width, mouseY: this.mouseY/this.height}),16);
 
     this.socket.on('position', data => {
-      console.log('coming here')
+      console.log('calling draw with data: ', data[0].x, data[0].y)
       this.canvas.draw(data);
     })
     this.socket.on('debug', data => {
