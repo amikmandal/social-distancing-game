@@ -36,21 +36,27 @@ io.on('connection', socket => {
     io.emit('position', {x: players[id].x, y: players[id].y} )
   })
 
-  socket.on('mouse', data => {
-    players[id].mouseX = data.mouseX
-    players[id].mouseY = data.mouseY
-  })
+  // socket.on('mouse', data => {
+  //   players[id].mouseX = data.mouseX
+  //   players[id].mouseY = data.mouseY
+  // })
 
   players[id].interval = setInterval(() => {
-    updateBotPosition(id);
-    //updatePosition(id);
+    updateMousePosition(id);
+    updatePosition(id);
     io.emit('debug', {x: players[id].mouseX, y: players[id].mouseY})
     io.emit('position', {x: players[id].x, y: players[id].y} )
   },16);
 
+  players[id].mouseInterval = setInterval(() => {
+    players[id].mouseX = players[id].w * Math.random()
+    players[id].mouseY = players[id].h * Math.random()
+  },1000);
+
   socket.on('disconnect', () => {
     console.log('disconnected ')
     clearInterval(players[id].interval)
+    clearInterval(players[id].mouseInterval)
     delete players.id
   });
 
@@ -63,6 +69,7 @@ function updatePosition(id){
   const diffY = players[id].mouseY - oldY
   const angle = Math.atan(diffY/diffX)
   const factor = diffX > 0 ? 1 : -1;
+
   if(distance(diffX,diffY) > 20){
     //constant speed
     players[id].x += factor * speed * Math.cos(angle)
@@ -87,23 +94,26 @@ function outOfBounds(c,max){
   return c<20 || c>2*(max - 20)
 }
 
-function updateBotPosition(id) {
-  const oldX = players[id].x
-  const oldY = players[id].y
+function updateMousePosition(id) {
+  const oldX = players[id].mouseX
+  const oldY = players[id].mouseY
   const rand = Math.random();
   const angle = rand*Math.PI*2;
 
   const randX = Math.random();
   const randY = Math.random();
+
   const factorX = (randX < 0.5 ? 1-randX : randX) > 0.75 ? 1 : -1;
   const factorY = (randY < 0.5 ? 1-randY : randY) > 0.75 ? 1 : -1;
-  players[id].x += factorX * 10 * Math.cos(angle);
-  players[id].y += factorY * 10 * Math.sin(angle);
-  if(outOfBounds(players[id].x,players[id].w)){
-    players[id].x = oldX
+
+  players[id].mouseX += factorX * 10 * Math.cos(angle);
+  players[id].mouseY += factorY * 10 * Math.sin(angle);
+
+  if(outOfBounds(players[id].mouseX,players[id].w)){
+    players[id].mouseX = oldX
   }
-  if(outOfBounds(players[id].y,players[id].h)){
-    players[id].y = oldY
+  if(outOfBounds(players[id].mouseY,players[id].h)){
+    players[id].mouseY = oldY
   }
   //console.log(distance(players[id].x - oldX, players[id].y - oldY))
 }
