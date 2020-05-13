@@ -10,10 +10,8 @@ class Client extends Component {
     super(props)
 
     this.id = 0
-    this.info = {
-      w: window.innerWidth,
-      h: window.innerHeight
-    }
+    this.width = window.innerWidth
+    this.height = window.innerHeight
 
     this._onMouseMove = this._onMouseMove.bind(this)
   }
@@ -21,19 +19,19 @@ class Client extends Component {
   componentDidMount() {
     this.socket = socketIo("http://localhost:3000");
     
-    this.interval = setInterval(()=>this.socket.emit('mouse', {mouseX: this.mouseX, mouseY: this.mouseY}),16);
+    this.interval = setInterval(()=>this.socket.emit('mouse', {mouseX: this.mouseX/this.width, mouseY: this.mouseY/this.height}),16);
 
-    this.socket.on('id', data => {
-      this.id = data
-      console.log(data);
-      this.socket.emit('info',this.info)
-    })
     this.socket.on('position', data => {
+      console.log('coming here')
       this.canvas.draw(data);
     })
     this.socket.on('debug', data => {
-      console.log(data.x, data.y);
+      console.log(data.x * this.width,data.y * this.height);
     })
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.interval)
   }
 
   _onMouseMove(e) {
