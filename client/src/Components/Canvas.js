@@ -38,7 +38,7 @@ class Canvas extends React.Component {
     render() {
         return (
           <div>
-              <canvas ref={this.setContext} width={this.width} height={this.height} style={{border: "1px solid black"}}></canvas>
+              <canvas ref={this.setContext} width={this.width} height={this.height} style={{border: "1px solid black"}}/>
           </div>
         );
     }

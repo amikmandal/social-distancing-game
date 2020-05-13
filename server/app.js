@@ -42,7 +42,8 @@ io.on('connection', socket => {
   })
 
   players[id].interval = setInterval(() => {
-    updatePosition(id);
+    updateBotPosition(id);
+    //updatePosition(id);
     io.emit('debug', {x: players[id].mouseX, y: players[id].mouseY})
     io.emit('position', {x: players[id].x, y: players[id].y} )
   },16);
@@ -70,11 +71,11 @@ function updatePosition(id){
 
   if(outOfBounds(players[id].x,players[id].w)){
     console.log('oldX')
-    players[id].x = oldX
+    players[id].x = x
   }
   if(outOfBounds(players[id].y,players[id].h)){
     console.log('oldY')
-    players[id].y = oldY
+    players[id].y = y
   }
 }
 
@@ -85,4 +86,28 @@ function distance(a,b){
 function outOfBounds(c,max){
   return c<20 || c>2*(max - 20)
 }
+
+function updateBotPosition(id) {
+  const oldX = players[id].x
+  const oldY = players[id].y
+  const angle = Math.random()*Math.PI*2;
+
+  const xDir = Math.cos(angle)*10;
+  const yDir = Math.sin(angle) * 10;
+
+  const factor = xDir > 0 ? 1 : -1;
+  if (xDir > 0 && yDir > 0) {
+    players[id].x += factor * speed * Math.cos(angle);
+    players[id].y += factor * speed * Math.sin(angle);
+  }
+  if(outOfBounds(players[id].x,players[id].w)){
+    console.log('oldX')
+    players[id].x = oldX
+  }
+  if(outOfBounds(players[id].y,players[id].h)){
+    console.log('oldY')
+    players[id].y = oldY
+  }
+}
+
 
