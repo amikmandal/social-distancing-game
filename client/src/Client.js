@@ -28,10 +28,10 @@ class Client extends Component {
       this.socket.emit('info',this.info)
     })
     this.socket.on('position', data => {
-      this.canvas.draw(data.x,data.y);
+      this.canvas.draw(data);
     })
     this.socket.on('debug', data => {
-      console.log(data.x,data.y);
+      console.log(data.id);
     })
   }
 
