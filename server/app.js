@@ -24,15 +24,17 @@ io.on('connection', socket => {
   console.log('players length: ', positions.length);
 
   if(stackIds.length==10){
+
     positions = []
+
     for(i=0; i<stackIds.length; i++){
       const pos = {x: setupData.positions[i].x, y: setupData.positions[i].y}
       positions.push(pos)
     }
 
-    for(i=0; i<stackIds.length; i++){
-      console.log(positions[i])
-    }
+    // for(i=0; i<stackIds.length; i++){
+    //   console.log(positions[i])
+    // }
 
   }
 
@@ -71,12 +73,6 @@ function updatePosition(id,mouseX,mouseY){
   const angle = Math.atan(diffY/diffX)
   const factor = diffX > 0 ? 1 : -1;
 
-  // console.log('data starts')
-  // console.log(oldX,oldY)
-  // console.log(mouseX,mouseY)
-  // console.log(newX,newY)
-  // console.log('data ends')
-
   if(distance(diffX,diffY) > radius){
 
     // console.log('updated Position')
@@ -94,14 +90,10 @@ function updatePosition(id,mouseX,mouseY){
     positions[id].x = newX
     positions[id].y = newY
 
-    // console.log('data starts')
-    // console.log(oldX,oldY)
-    // console.log(mouseX,mouseY)
-    // console.log(newX,newY)
-    // console.log('data ends')
-
   }
 }
+
+
 
 function distance(a,b){
   return Math.sqrt(a*a+b*b)
