@@ -4,7 +4,7 @@ import Canvas from './Components/Canvas'
 
 import socketIo from "socket.io-client";
 
-class App extends Component {
+class Client extends Component {
 
   constructor(props){
     super(props)
@@ -24,12 +24,10 @@ class App extends Component {
     this.interval = setInterval(()=>this.socket.emit('mouse', {mouseX: this.mouseX, mouseY: this.mouseY}),16);
 
     this.socket.on('id', data => {
-      //console.log(data);
       this.id = data
       this.socket.emit('info',this.info)
     })
     this.socket.on('position', data => {
-      //console.log(data.x,data.y);
       this.canvas.draw(data.x,data.y);
     })
     this.socket.on('debug', data => {
@@ -51,4 +49,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Client;
