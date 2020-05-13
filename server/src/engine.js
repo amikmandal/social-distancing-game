@@ -1,10 +1,13 @@
 const socketIo = require("socket.io")
 
 const positionData = require('../data/position.json')
-const updateHuman = require('./player.js')
+const update = require('./player.js');
+
+const player = update()
 
 var stackIds = [9,8,7,6,5,4,3,2,1,0]
 var positions = []
+var intervals = {}
 
 function run(server) {
 
@@ -15,20 +18,12 @@ function run(server) {
         console.log('players length: ', positions.length);
 
         if(stackIds.length==10){
+            initialize()
+        }
 
-            positions = []
-
-            
-            for(i=0; i<stackIds.length; i++){
-            const pos = {x: positionData.positions[i].x, y: positionData.positions[i].y}
-            positions.push(pos)
-            }
-
-            // for(i=0; i<stackIds.length; i++){
+        // for(i=0; i<stackIds.length; i++){
             //   console.log(positions[i])
             // }
-
-        }
 
         console.log('players length: ', positions.length);
 
@@ -36,7 +31,7 @@ function run(server) {
         console.log('client ', id, ' connected');
 
         socket.on('mouse', data => {
-            updateHuman(id,data,positions);
+            player.updateHuman(id,data,positions);
             io.sockets.emit('position', positions)
         })
 
@@ -47,6 +42,20 @@ function run(server) {
         });
 
     })
+
+    function initialize(){
+        positions = []
+        for(i=0; i<stackIds.length; i++){
+            const pos = {x: positionData.positions[i].x, y: positionData.positions[i].y}
+            positions.push(pos)
+            // if(i!=stackIds.length-1){
+            //     intervals[i] = this.setInterval(() => {
+            //         imitateHuman(id, positions);
+            //     },30)
+            // }
+        }
+    }
+
 }
 
 module.exports = run

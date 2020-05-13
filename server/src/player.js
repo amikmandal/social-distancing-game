@@ -2,6 +2,42 @@ const setupData = require('../data/config.json')
 const radius = setupData.radius
 const speed = setupData.speed
 
+function update() {
+
+    return {
+        updateHuman: (id,data,positions) => updateHuman(id,data,positions)
+    }
+    
+    
+    // //goal of this function is to imitate human mouse
+    // function imitateHuman(id, positions){
+       
+    //         const oldX = players[id].mouseX
+    //         const oldY = players[id].mouseY
+    //         const rand = Math.random();
+    //         const angle = rand*Math.PI*2;
+          
+    //         const randX = Math.random();
+    //         const randY = Math.random();
+          
+    //         const factorX = (randX < 0.5 ? 1-randX : randX) > 0.75 ? 1 : -1;
+    //         const factorY = (randY < 0.5 ? 1-randY : randY) > 0.75 ? 1 : -1;
+          
+    //         players[id].mouseX += factorX * 10 * Math.cos(angle);
+    //         players[id].mouseY += factorY * 10 * Math.sin(angle);
+          
+    //         if(outOfBounds(players[id].mouseX,players[id].w)){
+    //           players[id].mouseX = oldX
+    //         }
+    //         if(outOfBounds(players[id].mouseY,players[id].h)){
+    //           players[id].mouseY = oldY
+    //         }
+    //         //console.log(distance(players[id].x - oldX, players[id].y - oldY))
+          
+    // }
+
+}
+
 function updateHuman(id,data,positions){
 
     const mouseX = data.mouseX
@@ -35,6 +71,7 @@ function updateHuman(id,data,positions){
         positions[id].y = newY
 
     }
+
 }
 
 function distance(a,b){
@@ -45,4 +82,4 @@ function outOfBounds(c,radius){
     return c<radius || c>(1 - radius)
 }
 
-module.exports = updateHuman
+module.exports = update
