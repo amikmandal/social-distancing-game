@@ -90,24 +90,22 @@ function outOfBounds(c,max){
 function updateBotPosition(id) {
   const oldX = players[id].x
   const oldY = players[id].y
-  const angle = Math.random()*Math.PI*2;
+  const rand = Math.random();
+  const angle = rand*Math.PI*2;
 
-  const xDir = Math.cos(angle)*10;
-  const yDir = Math.sin(angle) * 10;
-
-  const factor = xDir > 0 ? 1 : -1;
-  if (xDir > 0 && yDir > 0) {
-    players[id].x += factor * speed * Math.cos(angle);
-    players[id].y += factor * speed * Math.sin(angle);
-  }
+  const randX = Math.random();
+  const randY = Math.random();
+  const factorX = (randX < 0.5 ? 1-randX : randX) > 0.75 ? 1 : -1;
+  const factorY = (randY < 0.5 ? 1-randY : randY) > 0.75 ? 1 : -1;
+  players[id].x += factorX * 10 * Math.cos(angle);
+  players[id].y += factorY * 10 * Math.sin(angle);
   if(outOfBounds(players[id].x,players[id].w)){
-    console.log('oldX')
     players[id].x = oldX
   }
   if(outOfBounds(players[id].y,players[id].h)){
-    console.log('oldY')
     players[id].y = oldY
   }
+  //console.log(distance(players[id].x - oldX, players[id].y - oldY))
 }
 
 
