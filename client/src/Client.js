@@ -19,7 +19,7 @@ class Client extends Component {
   componentDidMount() {
     this.socket = socketIo("http://localhost:3000");
     
-    this.interval = setInterval(()=>this.socket.emit('mouse', {mouseX: this.mouseX/this.width, mouseY: this.mouseY/this.height}),16);
+    this.interval = setInterval(()=>this.socket.emit('mouse', {mouseX: this.mouseX/this.width, mouseY: this.mouseY/this.height}),30);
 
     this.socket.on('position', data => {
       console.log('calling draw with data: ', data[0].x, data[0].y)
