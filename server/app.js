@@ -46,7 +46,7 @@ io.on('connection', socket => {
     players[id].y = players[id].h * setupData.positions[id].y
     players[id].mouseX = players[id].x
     players[id].mouseY = players[id].y
-    //io.emit('position', position);
+    io.emit('position', position);
     //io.emit('position', position)
   })
 
@@ -57,8 +57,7 @@ io.on('connection', socket => {
 
   players[id].interval = setInterval(() => {
     updatePosition(id);
-    io.emit('position', position);
-    io.emit('debug', {x: players[id].mouseX, y: players[id].mouseY})
+    //io.emit('debug', {x: players[id].mouseX, y: players[id].mouseY})
     //io.emit('position', {x: players[id].x, y: players[id].y} )
   },16);
 
