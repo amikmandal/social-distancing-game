@@ -47,20 +47,22 @@ io.on('connection', socket => {
     io.emit('debug', {x: players[id].mouseX, y: players[id].mouseY})
     io.emit('position', {x: players[id].x, y: players[id].y} )
   },16);
-
   players[id].mouseInterval = setInterval(() => {
     players[id].mouseX = players[id].w * Math.random()
     players[id].mouseY = players[id].h * Math.random()
   },1000);
-
   socket.on('disconnect', () => {
-    console.log('disconnected ')
-    clearInterval(players[id].interval)
-    clearInterval(players[id].mouseInterval)
+    console.log('disconnected ');
+    clearInterval(players[id].interval);
+    clearInterval(players[id].mouseInterval);
     delete players.id
   });
 
 })
+
+function setRandomInterval() {
+
+}
 
 function updatePosition(id){
   const oldX = players[id].x
@@ -78,11 +80,11 @@ function updatePosition(id){
 
   if(outOfBounds(players[id].x,players[id].w)){
     console.log('oldX')
-    players[id].x = x
+    players[id].x = oldX
   }
   if(outOfBounds(players[id].y,players[id].h)){
     console.log('oldY')
-    players[id].y = y
+    players[id].y = oldY
   }
 }
 
