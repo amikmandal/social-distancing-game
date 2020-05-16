@@ -2,27 +2,29 @@ const setupData = require('../data/config.json')
 const radius = setupData.radius
 const speed = setupData.speed
 
+var interval;
+
 function update() {
 
     return {
-        updateHuman: (id,data,positions) => updateHuman(id,data,positions),
-        updateBotWithInterval: (id, positions) => updateBotWithInterval(id, positions)
+        updateHuman: (id,positions) => updateHuman(id,positions),
+        updateBotWithInterval: (id,positions) => updateBotWithInterval(id,positions)
     }
-
 
 }
 function updateBotWithInterval(id, position) {
-    var rand = Math.random() * 10;
+    var rand = Math.random() * 1000;
     var myFunc = function() {
-        updateBot(id, position);
+        imitateHuman(id, position);
         setTimeout(myFunc, rand)
     };
-    rand = Math.random() * 10;
+    rand = Math.random() * 1000;
+    console.log("rand: " + rand);
     setTimeout(myFunc, rand)
 }
-// //goal of this function is to imitate human mouse
-function updateBot(id, positions){
-    console.log("run");
+
+//goal of this function is to imitate human mouse
+function imitateHuman(id, players){
     const oldX = players[id].mouseX
     const oldY = players[id].mouseY
     const rand = Math.random();
@@ -44,13 +46,12 @@ function updateBot(id, positions){
         players[id].mouseY = oldY
     }
     //console.log(distance(players[id].x - oldX, players[id].y - oldY))
-
 }
 
-function updateHuman(id,data,positions){
+function updateHuman(id,positions){
 
-    const mouseX = data.mouseX
-    const mouseY = data.mouseY
+    const mouseX = positions[id].mouseX
+    const mouseY = positions[id].mouseY
 
     const oldX = positions[id].x
     const oldY = positions[id].y
@@ -61,6 +62,8 @@ function updateHuman(id,data,positions){
     const diffY = mouseY - oldY
     const angle = Math.atan(diffY/diffX)
     const factor = diffX > 0 ? 1 : -1;
+
+    //console.log(mouseX,mouseY)
 
     if(distance(diffX,diffY) > radius){
 
