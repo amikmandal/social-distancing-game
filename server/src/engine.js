@@ -31,7 +31,9 @@ function run(server) {
         console.log('client ', id, ' connected');
 
         socket.on('mouse', data => {
-            player.updateHuman(id,data,positions);
+            positions[id].mouseX = data.mouseX
+            positions[id].mouseY = data.mouseY
+            player.updateHuman(id,positions);
             io.sockets.emit('position', positions)
         })
 
@@ -46,14 +48,33 @@ function run(server) {
     function initialize(){
         positions = []
         for(i=0; i<stackIds.length; i++){
+
             const pos = {x: positionData.positions[i].x, y: positionData.positions[i].y}
+            pos.mouseX = pos.x
+            pos.mouseY = pos.y
             positions.push(pos)
-            // if(i!=stackIds.length-1){
-            //     intervals[i] = this.setInterval(() => {
-            //         imitateHuman(id, positions);
+
+
+
+            // if(i>=0 && i<=8){
+            //     console.log('ids', i);
+            //     const id = i
+            //     //kill this interval later
+            //     this.setInterval(() => {
+            //         // console.log('ids', i);
+            //         player.imitateHuman(id, positions);
             //     },30)
             // }
         }
+
+        // this.setInterval(() => {
+        //     // console.log('ids', i);
+        //     player.imitateHuman(2, positions);
+        // },30)
+
+
+
+
     }
 
 }
