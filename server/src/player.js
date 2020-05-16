@@ -13,14 +13,26 @@ function update() {
 
 }
 function updateBotWithInterval(id, position) {
-    var rand = Math.random() * 1000;
-    var myFunc = function() {
-        imitateHuman(id, position);
-        setTimeout(myFunc, rand)
-    };
-    rand = Math.random() * 1000;
-    console.log("rand: " + rand);
-    setTimeout(myFunc, rand)
+    setInterval(() => {
+        randomizeMouse(id,position);
+    },500)
+    setInterval(() => {
+        imitateHuman(id,position);
+    }, 24);
+    // var myFunc = function() {
+    //     var rand = Math.random() * 1000;
+    //     console.log(rand);
+    //     imitateHuman(id, position);
+    //     setTimeout(myFunc, rand)
+    // };
+    // var rand = Math.random() * 5000;
+    // //console.log("rand: " + rand);
+    // setTimeout(myFunc, rand)
+}
+
+function randomizeMouse(id, position) {
+    position[id].mouseX = Math.random()
+    position[id].mouseY = Math.random()
 }
 
 //goal of this function is to imitate human mouse
@@ -36,15 +48,17 @@ function imitateHuman(id, players){
     const factorX = (randX < 0.5 ? 1-randX : randX) > 0.75 ? 1 : -1;
     const factorY = (randY < 0.5 ? 1-randY : randY) > 0.75 ? 1 : -1;
 
-    players[id].mouseX += factorX * 10 * Math.cos(angle);
-    players[id].mouseY += factorY * 10 * Math.sin(angle);
+    players[id].mouseX += factorX * Math.cos(angle);
+    players[id].mouseY += factorY * Math.sin(angle);
 
     if(outOfBounds(players[id].mouseX,players[id].w)){
-        players[id].mouseX = oldX
+        players[id].mouseX -= 2*(factorX * Math.cos(angle));
     }
     if(outOfBounds(players[id].mouseY,players[id].h)){
-        players[id].mouseY = oldY
+        players[id].mouseY -= 2*(factorY * Math.sin(angle));
     }
+
+    updateHuman(id,players)
     //console.log(distance(players[id].x - oldX, players[id].y - oldY))
 }
 
@@ -73,10 +87,10 @@ function updateHuman(id,positions){
         newY += factor * speed * Math.sin(angle)
 
         if(outOfBounds(newX,radius)){
-        newX = oldX
+            newX = oldX
         }
         if(outOfBounds(newY,radius)){
-        newY = oldY
+            newY = oldY
         }
 
         positions[id].x = newX
