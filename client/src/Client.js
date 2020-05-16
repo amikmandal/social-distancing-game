@@ -9,7 +9,7 @@ class Client extends Component {
   constructor(props){
     super(props)
 
-    this.id = 0
+    this.id = -1
     this.width = window.innerWidth
     this.height = window.innerHeight
 
@@ -19,10 +19,13 @@ class Client extends Component {
   componentDidMount() {
     this.socket = socketIo("http://localhost:3000");
     
-    this.interval = setInterval(()=>this.socket.emit('mouse', {mouseX: this.mouseX/this.width, mouseY: this.mouseY/this.height}),30);
+    this.interval = setInterval(()=>this.socket.emit('mouse', {mouseX: this.mouseX/this.width, mouseY: this.mouseY/this.height}),24);
+    
+    this.socket.on('id', id => this.id = id)
 
     this.socket.on('position', data => {
       //console.log('calling draw with data: ', data[0].x, data[0].y)
+      //console.log(this.id);
       this.canvas.draw(data);
     })
     // this.socket.on('debug', data => {
@@ -42,7 +45,7 @@ class Client extends Component {
   render() {
     return (
       <div onMouseMove={this._onMouseMove}>
-        <Canvas onRef={ref => (this.canvas = ref)}></Canvas>
+        <Canvas onRef={ref => (this.canvas = ref)} id={this.id}></Canvas>
       </div>
     );
   }

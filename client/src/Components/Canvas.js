@@ -5,6 +5,7 @@ class Canvas extends React.Component {
     constructor(props) {
         super(props);
 
+        this.id = this.props.id
         this.width = window.innerWidth
         this.height = window.innerHeight
         this.radius = 20
@@ -30,7 +31,7 @@ class Canvas extends React.Component {
 
     draw(data) {
         //console.log(data);
-        //console.log('coming')
+        //console.log(this.id)
         this.canvas.clearRect(0, 0, this.width, this.height);
         for(var i=0; i<data.length; i++){
             this.drawCircle(data[i].x * this.width , data[i].y * this.height)
