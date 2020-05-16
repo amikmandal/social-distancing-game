@@ -28,11 +28,20 @@ class Canvas extends React.Component {
         this.canvas = c.getContext('2d');
     }
 
-    draw(a,b){
+    draw(data) {
+        //console.log(data);
+        //console.log('coming')
         this.canvas.clearRect(0, 0, this.width, this.height);
+        for(var i=0; i<data.length; i++){
+            this.drawCircle(data[i].x * this.width , data[i].y * this.height)
+        }   
+    }
+
+    drawCircle(a,b){
         this.canvas.beginPath();
         this.canvas.arc(a,b,this.radius,0,2*Math.PI)
         this.canvas.fill();
+        //this.canvas.closePath();
     }
 
     render() {
