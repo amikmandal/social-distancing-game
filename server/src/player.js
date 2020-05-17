@@ -59,7 +59,7 @@ function imitateHuman(id, positions){
     }
     for (let i = positions.length-1; i >0; i--) {
         if (i !== id) {
-            if (isCollided(positions[id], positions[i])) {
+            if (isBotCollided(positions[id], positions[i])) {
                 positions[id].mouseX -= 2*(factorX * Math.cos(angle));
                 positions[id].mouseY -= 2*(factorY * Math.sin(angle));
             }
@@ -115,8 +115,16 @@ function distance(a,b){
 function outOfBounds(c,radius){
     return c<radius || c>(1 - radius)
 }
-function isCollided(a,b) {
+
+function isBotCollided(a,b) {
     const sum = 2 * radius + 0.005;
+    const x = a.x - b.x;
+    const y = a.y - b.y;
+    return (sum > Math.sqrt((x * x) + (y * y)))
+}
+
+function isCollided(a, b) {
+    const sum = 2 * radius;
     const x = a.x - b.x;
     const y = a.y - b.y;
     return (sum > Math.sqrt((x * x) + (y * y)))
