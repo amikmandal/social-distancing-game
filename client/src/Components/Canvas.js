@@ -30,19 +30,20 @@ class Canvas extends React.Component {
     }
 
     draw(data) {
-        //console.log(data);
-        //console.log(this.id)
         this.canvas.clearRect(0, 0, this.width, this.height);
         for(var i=0; i<data.length; i++){
-            this.drawCircle(data[i].x * this.width , data[i].y * this.height)
+            if(i === this.props.id)
+                this.drawCircle(data[i].x * this.width , data[i].y * this.height, "#c82124") //red
+            else
+                this.drawCircle(data[i].x * this.width , data[i].y * this.height, "#000000") //black
         }   
     }
 
-    drawCircle(a,b){
+    drawCircle(a,b,color){
         this.canvas.beginPath();
-        this.canvas.arc(a,b,this.radius,0,2*Math.PI)
+        this.canvas.fillStyle = color
+        this.canvas.arc(a,b,this.props.radius,0,2*Math.PI)
         this.canvas.fill();
-        //this.canvas.closePath();
     }
 
     render() {

@@ -25,7 +25,9 @@ function run(server) {
         console.log('players length: ', positions.length);
 
         const id = stackIds.pop();
-        socket.emit('id', id);
+        socket.emit('init', {id: id, radius: setupData.radius});
+
+        
         console.log('client ', id, ' connected');
 
         socket.on('mouse', data => {
