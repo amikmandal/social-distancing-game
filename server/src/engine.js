@@ -1,6 +1,7 @@
 const socketIo = require("socket.io")
 
 const positionData = require('../data/position.json')
+const setupData = require('../data/config.json')
 const update = require('./player.js');
 
 const player = update()
@@ -21,13 +22,12 @@ function run(server) {
             initialize()
         }
 
-        // for(i=0; i<stackIds.length; i++){
-            //   console.log(positions[i])
-            // }
-
         console.log('players length: ', positions.length);
 
         const id = stackIds.pop();
+        socket.emit('init', {id: id, radius: setupData.radius});
+
+        
         console.log('client ', id, ' connected');
 
         socket.on('mouse', data => {
@@ -41,6 +41,7 @@ function run(server) {
             console.log('client ', id, ' disconnected');
             // positions[id] = {x: } //change by bot
             stackIds.push(id)
+            //socket.off('id');
         });
 
     })
@@ -58,25 +59,7 @@ function run(server) {
                 player.updateBotWithInterval(id, positions)
             }
 
-
-            // if(i>=0 && i<=8){
-            //     console.log('ids', i);
-            //     const id = i
-            //     //kill this interval later
-            //     this.setInterval(() => {
-            //         // console.log('ids', i);
-            //         player.imitateHuman(id, positions);
-            //     },30)
-            // }
         }
-
-        // this.setInterval(() => {
-        //     // console.log('ids', i);
-        //     player.imitateHuman(2, positions);
-        // },30)
-
-
-
 
     }
 
