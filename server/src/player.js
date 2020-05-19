@@ -36,9 +36,9 @@ function randomizeMouse(id, position) {
 }
 
 //goal of this function is to imitate human mouse
-function imitateHuman(id, players){
-    const oldX = players[id].mouseX
-    const oldY = players[id].mouseY
+function imitateHuman(id, positions){
+    const oldX = positions[id].mouseX
+    const oldY = positions[id].mouseY
     const rand = Math.random();
     const angle = rand*Math.PI*2;
 
@@ -48,17 +48,25 @@ function imitateHuman(id, players){
     const factorX = (randX < 0.5 ? 1-randX : randX) > 0.75 ? 1 : -1;
     const factorY = (randY < 0.5 ? 1-randY : randY) > 0.75 ? 1 : -1;
 
-    players[id].mouseX += factorX * Math.cos(angle);
-    players[id].mouseY += factorY * Math.sin(angle);
+    positions[id].mouseX += factorX * Math.cos(angle);
+    positions[id].mouseY += factorY * Math.sin(angle);
 
-    if(outOfBounds(players[id].mouseX,players[id].w)){
-        players[id].mouseX -= 2*(factorX * Math.cos(angle));
+    if(outOfBounds(positions[id].mouseX,positions[id].w)){
+        positions[id].mouseX -= 2*(factorX * Math.cos(angle));
     }
-    if(outOfBounds(players[id].mouseY,players[id].h)){
-        players[id].mouseY -= 2*(factorY * Math.sin(angle));
+    if(outOfBounds(positions[id].mouseY,positions[id].h)){
+        positions[id].mouseY -= 2*(factorY * Math.sin(angle));
+    }
+    for (let i = positions.length-1; i >0; i--) {
+        if (i !== id) {
+            if (isBotCollided(positions[id], positions[i])) {
+                positions[id].mouseX -= 2*(factorX * Math.cos(angle));
+                positions[id].mouseY -= 2*(factorY * Math.sin(angle));
+            }
+        }
     }
 
-    updateHuman(id,players)
+    updateHuman(id,positions)
     //console.log(distance(players[id].x - oldX, players[id].y - oldY))
 }
 
@@ -108,4 +116,18 @@ function outOfBounds(c,radius){
     return c<radius || c>(1 - radius)
 }
 
-module.exports = update
+function isBotCollided(a,b) {
+    const sum = 2 * radius + 0.005;
+    const x = a.x - b.x;
+    const y = a.y - b.y;
+    return (sum > Math.sqrt((x * x) + (y * y)))
+}
+
+function isCollided(a, b) {
+    const sum = 2 * radius;
+    const x = a.x - b.x;
+    const y = a.y - b.y;
+    return (sum > Math.sqrt((x * x) + (y * y)))
+}
+
+module.exports = update;
