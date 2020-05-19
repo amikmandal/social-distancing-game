@@ -10,12 +10,13 @@ class Canvas extends React.Component {
         this.width = window.innerWidth
         this.height = window.innerHeight
 
-        this.bg = 'https://lh3.googleusercontent.com/proxy/cCm7L-tScWQ-EpApONYmNtNQRrHAyMQY3f4bybiQV4Tr8JZkgc4R92fSZrRF4c7V-zOgziaZ_q-uAsoXUQ8hAm-gsb8WIrnr3uN2Tiod9MpoAi8LDVolzA'
+        this.bg = 'https://i.ibb.co/mt8KYcS/unnamed.png'
         this.img = new Image();
         this.img.src = this.bg;
 
         this.setContextBgCanvas = this.setContextBgCanvas.bind(this);
         this.setContext = this.setContext.bind(this);
+
     }
 
     componentDidMount() {
