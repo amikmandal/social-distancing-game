@@ -5,16 +5,14 @@ class Canvas extends React.Component {
 
     constructor(props) {
         super(props);
-
-        //this.bg = 'https://www.xmple.com/wallpaper/graph-paper-white-blue-grid-1920x1080-c2-ffffff-add8e6-l2-7-28-a-0-f-20.svg';
-        this.bg = 'https://lh3.googleusercontent.com/proxy/cCm7L-tScWQ-EpApONYmNtNQRrHAyMQY3f4bybiQV4Tr8JZkgc4R92fSZrRF4c7V-zOgziaZ_q-uAsoXUQ8hAm-gsb8WIrnr3uN2Tiod9MpoAi8LDVolzA'
         
         this.id = this.props.id
         this.width = window.innerWidth
         this.height = window.innerHeight
-        this.radius = 20
-        this.frameTime = 32
-        this.speed = 10
+
+        this.bg = 'https://lh3.googleusercontent.com/proxy/cCm7L-tScWQ-EpApONYmNtNQRrHAyMQY3f4bybiQV4Tr8JZkgc4R92fSZrRF4c7V-zOgziaZ_q-uAsoXUQ8hAm-gsb8WIrnr3uN2Tiod9MpoAi8LDVolzA'
+        this.img = new Image();
+        this.img.src = this.bg;
 
         this.setContextBgCanvas = this.setContextBgCanvas.bind(this);
         this.setContext = this.setContext.bind(this);
@@ -22,15 +20,7 @@ class Canvas extends React.Component {
 
     componentDidMount() {
         this.props.onRef(this)
-
-        // const img = new Image();
-        // img.src = this.bg;
-
-        // img.onload = function(){
-        //     var ptrn = this.bgCanvas.createPattern(img, 'repeat');
-        //     this.bgCanvas.fillStyle = ptrn;
-        //     this.bgCanvas.fillRect(0, 0, this.width, this.height);
-        // }
+        this.img.onload = this.drawBg(this.bgCanvas,this.img,this.width,this.height)
     }
 
     componentWillUnmount() {
@@ -39,20 +29,14 @@ class Canvas extends React.Component {
 
     setContextBgCanvas(c) {
         this.bgCanvas = c.getContext('2d');
-
-        const img = new Image();
-        img.src = this.bg;
-        img.onload = this.drawBg (this.bgCanvas,img,this.width,this.height)
     }
 
     drawBg(bgCanvas,img,width,height) {
-        //console.log(img)
-        //bgCanvas.drawImage(img,0,0);
         var ptrn = bgCanvas.createPattern(img, 'repeat');
         bgCanvas.rect(0,0,width,height);
         bgCanvas.fillStyle = ptrn;
         bgCanvas.fill();
-        //bgCanvas.fillRect(0, 0, width, height);
+        console.log(bgCanvas);
     }
 
     setContext(c) {
