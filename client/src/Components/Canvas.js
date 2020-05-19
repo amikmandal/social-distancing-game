@@ -1,28 +1,42 @@
 import React from 'react';
+//import background from '../assets/images/bg.png'
 
 class Canvas extends React.Component {
 
     constructor(props) {
         super(props);
-
+        
         this.id = this.props.id
         this.width = window.innerWidth
         this.height = window.innerHeight
-        this.radius = 20
-        this.frameTime = 32
-        this.speed = 10
 
-        //this.state = {mouseX: this.width/2, mouseY: this.height/2, x: this.width/2, y: this.height/2}
+        this.bg = 'https://lh3.googleusercontent.com/proxy/cCm7L-tScWQ-EpApONYmNtNQRrHAyMQY3f4bybiQV4Tr8JZkgc4R92fSZrRF4c7V-zOgziaZ_q-uAsoXUQ8hAm-gsb8WIrnr3uN2Tiod9MpoAi8LDVolzA'
+        this.img = new Image();
+        this.img.src = this.bg;
 
+        this.setContextBgCanvas = this.setContextBgCanvas.bind(this);
         this.setContext = this.setContext.bind(this);
     }
 
     componentDidMount() {
         this.props.onRef(this)
+        this.img.onload = this.drawBg(this.bgCanvas,this.img,this.width,this.height)
     }
 
     componentWillUnmount() {
         this.props.onRef(undefined)
+    }
+
+    setContextBgCanvas(c) {
+        this.bgCanvas = c.getContext('2d');
+    }
+
+    drawBg(bgCanvas,img,width,height) {
+        var ptrn = bgCanvas.createPattern(img, 'repeat');
+        bgCanvas.rect(0,0,width,height);
+        bgCanvas.fillStyle = ptrn;
+        bgCanvas.fill();
+        console.log(bgCanvas);
     }
 
     setContext(c) {
@@ -49,7 +63,8 @@ class Canvas extends React.Component {
     render() {
         return (
           <div>
-              <canvas ref={this.setContext} width={this.width} height={this.height} style={{border: "1px solid black"}}/>
+              <canvas ref={this.setContextBgCanvas} width={this.width} height={this.height} style={{position: "absolute"}}/>
+              <canvas ref={this.setContext} width={this.width} height={this.height} style={{position: "absolute", border: "1px solid black"}}/>
           </div>
         );
     }
