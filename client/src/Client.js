@@ -21,7 +21,7 @@ class Client extends Component {
     this.socket = socketIo("http://localhost:3000");
     this.socket.on('init', data => this.setState({id: data.id, radius: data.radius * this.height}))
     this.socket.on('position', data => this.canvas.draw(data))
-
+    //this.socket.on('gameOver', data => )
     this.interval = setInterval(()=>this.socket.emit('mouse', {mouseX: this.mouseX/this.width, mouseY: this.mouseY/this.height}),24);
 
     // this.socket.on('debug', data => {
@@ -36,8 +36,8 @@ class Client extends Component {
   _onMouseMove(e) {
     this.mouseX = e.screenX
     this.mouseY = e.screenY - 75
-  } 
-  
+  }
+
   render() {
     return (
       <div onMouseMove={this._onMouseMove}>

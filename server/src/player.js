@@ -3,14 +3,28 @@ const radius = setupData.radius
 const speed = setupData.speed
 
 var interval;
+var isPlayer;
+var lose = false;
 
 function update() {
 
     return {
         updateHuman: (id,positions) => updateHuman(id,positions),
-        updateBotWithInterval: (id,positions) => updateBotWithInterval(id,positions)
+        updateBotWithInterval: (id,positions) => updateBotWithInterval(id,positions),
+        endGame: (id, positions) => endGame(id, positions),
+        setPlayer: (isTrue) => setPlayer(isTrue)
     }
 
+}
+function endGame(id, positions) {
+    for (let i=0; i<positions.length; i++) {
+        if (i !== id && isPlayer) {
+            return isCollided(positions[id], positions[i])
+        }
+    }
+}
+function setPlayer(isTrue) {
+    isPlayer = isTrue;
 }
 function updateBotWithInterval(id, position) {
     setInterval(() => {

@@ -4,9 +4,11 @@ const positionData = require('../data/position.json')
 const setupData = require('../data/config.json')
 const update = require('./player.js');
 
-const player = update()
+const player = [update()]
 
 var stackIds = [9,8,7,6,5,4,3,2,1,0]
+var botIDs = []
+var playerIDs = []
 var positions = []
 var intervals = {}
 
@@ -27,15 +29,20 @@ function run(server) {
         const id = stackIds.pop();
         socket.emit('init', {id: id, radius: setupData.radius});
 
-        
+
         console.log('client ', id, ' connected');
 
         socket.on('mouse', data => {
             positions[id].mouseX = data.mouseX
             positions[id].mouseY = data.mouseY
-            player.updateHuman(id,positions);
+            player[0].updateHuman(id,positions);
             io.sockets.emit('position', positions)
-        })
+        });
+
+        // for (let id=0; id<playerIDs.length; id++) {
+        //     io.sockets.emit('gameOver', playerIDs[id].endGame)
+        // }
+        io.sockets.emit('gameOver', player[0].endGame(0, positions));
 
         socket.on('disconnect', () => {
             console.log('client ', id, ' disconnected');
@@ -44,7 +51,7 @@ function run(server) {
             //socket.off('id');
         });
 
-    })
+    });
 
     function initialize(){
         positions = []
@@ -56,7 +63,7 @@ function run(server) {
             positions.push(pos)
 
             if (id !== 0) {
-                player.updateBotWithInterval(id, positions)
+                player[0].updateBotWithInterval(id, positions)
             }
 
         }
